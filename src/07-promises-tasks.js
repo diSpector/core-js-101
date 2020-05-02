@@ -60,7 +60,7 @@ function processAllPromises(array) {
   const resArr = [];
   Promise.all(array).then((values) => {
     resArr.push(values);
-  });
+  }).catch((e) => e);
   return new Promise((res) => res(resArr));
 }
 
@@ -104,8 +104,12 @@ function getFastestPromise(array) {
  *    });
  *
  */
-function chainPromises(/* array, action */) {
-  throw new Error('Not implemented');
+function chainPromises(array, action) {
+  const resArr = [];
+  const resPr = (pr) => pr
+    .then((res) => resArr.push(res)).catch((rej) => rej);
+  const r = new Promise((resolve) => resolve(array.map((prom) => resPr(prom))));
+  return r.then(() => resArr.reduce((acc, cur) => action(acc, cur)));
 }
 
 module.exports = {
