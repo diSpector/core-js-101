@@ -442,8 +442,20 @@ function toNaryString(num, n) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const getColumn = (matrix, m) => matrix.map((item) => item[m]);
+  const allEqual = (arr) => arr.every((v) => (v === arr[0]));
+  const divArr = [];
+  const resArr = [];
+  pathes.forEach((item) => divArr.push(item.split('/')));
+  const minLength = (arr) => Math.min(...arr.map((item) => item.length));
+  for (let i = 0; i < minLength(divArr); i += 1) {
+    const colArr = getColumn(divArr, i);
+    if (allEqual(colArr)) {
+      resArr.push(colArr[0]);
+    }
+  }
+  return (resArr.length !== 0) ? `${resArr.join('/')}/` : '';
 }
 
 
@@ -465,8 +477,20 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const getRow = (matrix, n) => matrix[n];
+  const getColumn = (matrix, m) => matrix.map((item) => item[m]);
+  const mult = (row, column) => row.reduce((prev, cur, i) => prev + cur * column[i], 0);
+  const resRows = m1.length;
+  const resCols = m2[0].length;
+  const resMatrix = [];
+  for (let i = 0; i < resRows; i += 1) {
+    resMatrix.push([]);
+    for (let j = 0; j < resCols; j += 1) {
+      resMatrix[resMatrix.length - 1].push(mult(getRow(m1, i), getColumn(m2, j)));
+    }
+  }
+  return resMatrix;
 }
 
 
@@ -500,8 +524,33 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  const getRow = (matrix, n) => matrix[n];
+  const getColumn = (matrix, m) => matrix.map((item) => item[m]);
+  const getDiag1 = (matrix) => [matrix[0][0], matrix[1][1], matrix[2][2]];
+  const getDiag2 = (matrix) => [matrix[2][0], matrix[1][1], matrix[0][2]];
+  const rowsCount = position.length;
+  const allEqual = (arr) => arr.every((v) => (v === arr[0])) && (arr.length === rowsCount);
+  let resArr;
+  for (let i = 0; i < rowsCount; i += 1) {
+    const row = getRow(position, i);
+    const col = getColumn(position, i);
+    if (allEqual(row)) {
+      [resArr] = row;
+    }
+    if (allEqual(col)) {
+      [resArr] = col;
+    }
+  }
+  const diag1 = getDiag1(position);
+  const diag2 = getDiag2(position);
+  if (allEqual(diag1)) {
+    [resArr] = diag1;
+  }
+  if (allEqual(diag2)) {
+    [resArr] = diag2;
+  }
+  return resArr;
 }
 
 
