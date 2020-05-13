@@ -104,12 +104,18 @@ function getFastestPromise(array) {
  *    });
  *
  */
+// function chainPromises(array, action) {
+//   const resArr = [];
+//   const resPr = (pr) => pr
+//     .then((res) => resArr.push(res)).catch((rej) => rej);
+//   const r = new Promise((resolve) => resolve(array.map((prom) => resPr(prom))));
+//   return r.then(() => resArr.reduce((acc, cur) => action(acc, cur)));
+// }
 function chainPromises(array, action) {
-  const resArr = [];
-  const resPr = (pr) => pr
-    .then((res) => resArr.push(res)).catch((rej) => rej);
-  const r = new Promise((resolve) => resolve(array.map((prom) => resPr(prom))));
-  return r.then(() => resArr.reduce((acc, cur) => action(acc, cur)));
+  return array.reduce((prevProm, currProm) => currProm.then((x) => prevProm
+    .then((y) => action(y, x))
+    .catch((e) => e))
+    .catch((e) => e));
 }
 
 module.exports = {
