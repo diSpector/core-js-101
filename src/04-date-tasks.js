@@ -98,8 +98,8 @@ function timeSpanToString(startDate, endDate) {
  */
 function angleBetweenClockHands(dateutc) {
   const date = new Date(dateutc);
-  const hours = ((date.getHours() - 3) > 0) ? date.getHours() - 3 : date.getHours() - 3 + 12;
-  // const hours = ((date.getHours()) > 0) ? date.getHours() : date.getHours() + 12;
+  // const hours = ((date.getHours() - 3) > 0) ? date.getHours() - 3 : date.getHours() - 3 + 12;
+  const hours = ((date.getHours()) > 0) ? date.getHours() : date.getHours() + 12;
   const corrHours = (hours > 11) ? hours - 12 : hours;
   const minutes = date.getMinutes();
   const diff = Math.abs((corrHours + (minutes / 60)) * 30 - minutes * 6);
